@@ -1,0 +1,86 @@
+{
+  "question": "اكتر خضار مشهور",
+  "total_responses": 984,
+  "answers": [
+    {
+      "answer": "بطاطس",
+      "frequency": 96
+    },
+    {
+      "answer": "بصل",
+      "frequency": 84
+    },
+    {
+      "answer": "جزر",
+      "frequency": 84
+    },
+    {
+      "answer": "باذنجان",
+      "frequency": 82
+    },
+    {
+      "answer": "بامية",
+      "frequency": 82
+    },
+    {
+      "answer": "فاصوليا",
+      "frequency": 76
+    },
+    {
+      "answer": "كرنب",
+      "frequency": 70
+    },
+    {
+      "answer": "خيار",
+      "frequency": 59
+    },
+    {
+      "answer": "ملوخية",
+      "frequency": 57
+    },
+    {
+      "answer": "كابوتشي",
+      "frequency": 56
+    },
+    {
+      "answer": "كوسة",
+      "frequency": 54
+    },
+    {
+      "answer": "قرنبيط",
+      "frequency": 41
+    },
+    {
+      "answer": "كرفس",
+      "frequency": 37
+    },
+    {
+      "answer": "طماطم",
+      "frequency": 27
+    },
+    {
+      "answer": "ثوم",
+      "frequency": 22
+    },
+    {
+      "answer": "خس",
+      "frequency": 17
+    },
+    {
+      "answer": "فلفل",
+      "frequency": 12
+    },
+    {
+      "answer": "سبانخ",
+      "frequency": 12
+    },
+    {
+      "answer": "فجل",
+      "frequency": 10
+    },
+    {
+      "answer": "جرجير",
+      "frequency": 6
+    }
+  ]
+}

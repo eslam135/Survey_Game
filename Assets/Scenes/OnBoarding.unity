@@ -202,12 +202,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1360469299}
         m_TargetAssemblyTypeName: OnboardingHandler, Assembly-CSharp
-        m_MethodName: changeAlpha
-        m_Mode: 2
+        m_MethodName: OnAvatarSelectionPress
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 41514398}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -522,11 +522,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1360469299}
         m_TargetAssemblyTypeName: OnboardingHandler, Assembly-CSharp
-        m_MethodName: changeAlpha
-        m_Mode: 2
+        m_MethodName: OnAvatarSelectionPress
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 181662791}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1414,12 +1414,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1360469299}
         m_TargetAssemblyTypeName: OnboardingHandler, Assembly-CSharp
-        m_MethodName: changeAlpha
-        m_Mode: 2
+        m_MethodName: OnAvatarSelectionPress
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1428769363}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1546,12 +1546,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1360469299}
         m_TargetAssemblyTypeName: OnboardingHandler, Assembly-CSharp
-        m_MethodName: changeAlpha
-        m_Mode: 2
+        m_MethodName: OnAvatarSelectionPress
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1431501960}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

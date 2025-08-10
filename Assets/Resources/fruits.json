@@ -1,0 +1,86 @@
+{
+  "question": "اكتر فاكهه مشهوره",
+  "total_responses": 1257,
+  "answers": [
+    {
+      "answer": "رمان",
+      "frequency": 97
+    },
+    {
+      "answer": "فراولة",
+      "frequency": 93
+    },
+    {
+      "answer": "جوافة",
+      "frequency": 92
+    },
+    {
+      "answer": "برتقال",
+      "frequency": 90
+    },
+    {
+      "answer": "مانجو",
+      "frequency": 89
+    },
+    {
+      "answer": "كُمثرى",
+      "frequency": 83
+    },
+    {
+      "answer": "موز",
+      "frequency": 77
+    },
+    {
+      "answer": "بطيخ",
+      "frequency": 77
+    },
+    {
+      "answer": "أناناس",
+      "frequency": 70
+    },
+    {
+      "answer": "بلح",
+      "frequency": 69
+    },
+    {
+      "answer": "كيوي",
+      "frequency": 66
+    },
+    {
+      "answer": "مشمش",
+      "frequency": 63
+    },
+    {
+      "answer": "شمام",
+      "frequency": 58
+    },
+    {
+      "answer": "عنب",
+      "frequency": 54
+    },
+    {
+      "answer": "بابايا",
+      "frequency": 51
+    },
+    {
+      "answer": "تفاح",
+      "frequency": 41
+    },
+    {
+      "answer": "تين",
+      "frequency": 37
+    },
+    {
+      "answer": "توت",
+      "frequency": 34
+    },
+    {
+      "answer": "خوخ",
+      "frequency": 11
+    },
+    {
+      "answer": "ليمون",
+      "frequency": 5
+    }
+  ]
+}

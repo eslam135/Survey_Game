@@ -1,0 +1,86 @@
+{
+  "question": "اكتر مشروب سخن مشهور",
+  "total_responses": 892,
+  "answers": [
+    {
+      "answer": "لبن",
+      "frequency": 95
+    },
+    {
+      "answer": "شوكولاتة",
+      "frequency": 84
+    },
+    {
+      "answer": "سحلب",
+      "frequency": 82
+    },
+    {
+      "answer": "ينسون",
+      "frequency": 79
+    },
+    {
+      "answer": "كركديه",
+      "frequency": 70
+    },
+    {
+      "answer": "زنجبيل",
+      "frequency": 66
+    },
+    {
+      "answer": "شاي باللبن",
+      "frequency": 56
+    },
+    {
+      "answer": "قرفة",
+      "frequency": 52
+    },
+    {
+      "answer": "مغات",
+      "frequency": 52
+    },
+    {
+      "answer": "كاكاو",
+      "frequency": 50
+    },
+    {
+      "answer": "شاي أخضر",
+      "frequency": 40
+    },
+    {
+      "answer": "شوربة عدس",
+      "frequency": 35
+    },
+    {
+      "answer": "قهوة سادة",
+      "frequency": 29
+    },
+    {
+      "answer": "أسبريسو",
+      "frequency": 23
+    },
+    {
+      "answer": "نسكافيه",
+      "frequency": 22
+    },
+    {
+      "answer": "نعناع",
+      "frequency": 21
+    },
+    {
+      "answer": "قهوة",
+      "frequency": 12
+    },
+    {
+      "answer": "قهوة تركي",
+      "frequency": 12
+    },
+    {
+      "answer": "حلبة",
+      "frequency": 11
+    },
+    {
+      "answer": "شاي",
+      "frequency": 1
+    }
+  ]
+}

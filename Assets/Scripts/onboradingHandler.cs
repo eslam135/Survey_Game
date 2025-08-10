@@ -17,10 +17,10 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
         avatarIndex = PlayerPrefs.GetInt("avatarIndex", -1);
         playerName = PlayerPrefs.GetString("name", "");
 
-        if (!string.IsNullOrEmpty(playerName) && avatarIndex != -1)
-        {
-            SceneManager.LoadScene(1);
-        }
+        //if (!string.IsNullOrEmpty(playerName) && avatarIndex != -1)
+        //{
+        //    SceneManager.LoadScene(1);
+        //}
     }
 
     public void OnContinuePress()
