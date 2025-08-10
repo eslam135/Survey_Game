@@ -11,6 +11,8 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
     private string playerName;
 
     [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private TMP_Text error;
+
 
     private void Start()
     {
@@ -27,10 +29,18 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
     {
         playerName = nameInput.text.Trim();
 
-        if (avatarIndex == -1 || string.IsNullOrEmpty(playerName))
+        if (avatarIndex == -1)
         {
-            Debug.LogWarning("Avatar or Name not set.");
+            Debug.LogWarning("Avatar not set.");
+            error.text = "Avatar is not set";
+            error.color = Color.red;
             return;
+        }
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("Name not set.");
+            error.text = "Name is not set";
+            error.color = Color.red;
         }
 
         PlayerPrefs.SetString("name", playerName);

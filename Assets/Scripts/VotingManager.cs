@@ -21,7 +21,6 @@ public class VotingManager : MonoBehaviourPunCallbacks
     private Dictionary<string, int> votes = new Dictionary<string, int>();
     private float votingTime = 60f;
     private bool isVotingActive = false;
-
     void Start()
     {
         result.text = "";
@@ -80,9 +79,12 @@ public class VotingManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_RegisterVote(string category)
     {
+        if (!PhotonNetwork.IsMasterClient) return; 
+
         if (votes.ContainsKey(category))
             votes[category]++;
     }
+
 
     void StartVoting()
     {
@@ -106,13 +108,17 @@ public class VotingManager : MonoBehaviourPunCallbacks
 
     void EndVoting()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         isVotingActive = false;
 
         string winner = null;
         int maxVotes = -1;
+        string resultsSummary = "Results:\n";
 
         foreach (var kvp in votes)
         {
+            resultsSummary += $"{kvp.Key}: {kvp.Value} votes\n";
             if (kvp.Value > maxVotes)
             {
                 maxVotes = kvp.Value;
@@ -120,13 +126,15 @@ public class VotingManager : MonoBehaviourPunCallbacks
             }
         }
 
-        photonView.RPC("RPC_AnnounceWinner", RpcTarget.All, winner);
+        photonView.RPC("RPC_AnnounceWinner", RpcTarget.All, resultsSummary, winner);
     }
 
     [PunRPC]
-    void RPC_AnnounceWinner(string winner)
+    void RPC_AnnounceWinner(string resultsSummary, string winner)
     {
         Debug.Log("Winner: " + winner);
-        result.text = winner;
+        result.text = resultsSummary + "\nWinner: " + winner;
     }
+
+
 }

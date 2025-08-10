@@ -7,6 +7,7 @@ using TMPro;
 public class Launcher : MonoBehaviourPunCallbacks
 {
     public TMP_InputField roomCodeInput;
+    [SerializeField] private TMP_Text error;
     public Button createRoomButton;
     public Button joinRoomButton;
 
@@ -53,14 +54,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         int avatarIndex = PlayerPrefs.GetInt("avatarIndex", 0);
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("avatarIndex"))
         {
-            Debug.Log("Inside");
             avatarIndex = (int)PhotonNetwork.LocalPlayer.CustomProperties["avatarIndex"];
         }
-        else
-        {
-            Debug.Log("No");
-        }
-            Debug.Log("Join " + avatarIndex);
 
         string code = roomCodeInput.text.Trim().ToUpper();
         PhotonNetwork.NickName = string.IsNullOrEmpty(PlayerPrefs.GetString("name")) ? GenerateRandomName() : PlayerPrefs.GetString("name");
@@ -75,11 +70,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         Debug.LogError("Join Room Failed: " + message);
+        error.text = message;
+        error.color = Color.red;
     }
 
     string GenerateRoomCode(int length)
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const string chars = "0123456789";
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         for (int i = 0; i < length; i++)
         {
