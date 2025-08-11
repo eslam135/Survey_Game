@@ -50,7 +50,7 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable() { { "avatarIndex", avatarIndex } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
-        SceneManager.LoadScene(1);
+        UIManager.Instance.SwitchState(GameState.MainMenu);
     }
 
     public void OnAvatarSelectionPress(int chosenIndex)

@@ -101,9 +101,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel(3);
+            photonView.RPC(nameof(RpcSwitchState), RpcTarget.All, (int)GameState.Game);
         }
     }
+
+    [PunRPC]
+    void RpcSwitchState(int stateIndex)
+    {
+        UIManager.Instance.SwitchState((GameState)stateIndex);
+    }
+
 }
 public class PlayerData
 {

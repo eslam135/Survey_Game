@@ -11,7 +11,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public Button createRoomButton;
     public Button joinRoomButton;
 
-
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -34,7 +33,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     void CreateRoom()
     {
         int avatarIndex = PlayerPrefs.GetInt("avatarIndex", 0);
-        Debug.Log("Create " +avatarIndex);
         ExitGames.Client.Photon.Hashtable customProps = new ExitGames.Client.Photon.Hashtable
         {
             {
@@ -64,7 +62,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Lobby");
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("Lobby");
+        UIManager.Instance.SwitchState(GameState.Lobby);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 1631103289908673553}
   - component: {fileID: 7215721569029816246}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Avatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,8 +123,9 @@ GameObject:
   - component: {fileID: 1931799746412253221}
   - component: {fileID: 4660811401179717324}
   - component: {fileID: 2290540912578498486}
+  - component: {fileID: 4678351671527427736}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PlayerName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -181,8 +182,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e3b05037c758cd343b5881d1277c7593, type: 2}
+  m_sharedMaterial: {fileID: 4830042950271180684, guid: e3b05037c758cd343b5881d1277c7593, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -214,7 +215,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -250,3 +251,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4678351671527427736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7349710876316240820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc259e3df174eb742b05ae1ebf22a965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explicitArabicTranslation: 
+  autoLookupCommonWords: 0
+  autoDetectArabicInOriginal: 1
+  forceEnglishLeft: 0
+  forceArabicRight: 0

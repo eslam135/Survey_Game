@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameScene.unity
     guid: f5cc16f01e38fc5468849afb9c18d356
   - enabled: 1
-    path: Assets/Scenes/VotingSystem.unity
+    path: Assets/Scenes/Game.unity
     guid: 98378ba76c276d244a63ed4262a6bd8c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
