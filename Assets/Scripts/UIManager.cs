@@ -56,6 +56,11 @@ public class UIManager : MonoBehaviour
     {
         return currState;
     }
+
+    public void onBackButtonPress()
+    {
+        SwitchState(GameState.MainMenu);
+    }
 }
 
 public enum GameState

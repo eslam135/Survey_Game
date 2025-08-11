@@ -1,5 +1,8 @@
 {
-  "question": "اكتر مشروب سخن مشهور",
+  "MostQuestion": "The most common hot drink",
+  "LeastQuestion": "The least common hot drink",
+  "arabicMostQuestion": "اكتر مشروب سخن مشهور",
+  "arabicLeastQuestion": "اقل مشروب سخن مشهور",
   "total_responses": 892,
   "answers": [
     {

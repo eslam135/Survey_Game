@@ -45,6 +45,9 @@ MonoBehaviour:
   - RPC_RegisterVote
   - RPC_SetCategories
   - RpcSwitchState
+  - RPC_OnStateChanged
+  - RPC_ReceiveAnswer
+  - RPC_ShowRankings
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

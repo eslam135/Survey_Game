@@ -1,10 +1,9 @@
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using System.Collections.Generic;
 using TMPro;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class VotingManager : MonoBehaviourPunCallbacks
 {
@@ -15,24 +14,23 @@ public class VotingManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button[] allButtons;
 
     [Header("Category Files")]
-    [SerializeField] private TextAsset[] categoryJsonFiles; 
+    [SerializeField] private TextAsset[] categoryJsonFiles;
 
     private string[] selectedCategories = new string[3];
     private Dictionary<string, int> votes = new Dictionary<string, int>();
-    private float votingTime = 60f;
+    private float votingTime;
     private bool isVotingActive = false;
-    void Start()
+
+    public void StartVotingPhase()
     {
         result.text = "";
         if (PhotonNetwork.IsMasterClient)
-        {
             StartCoroutine(DelayedStartVoting());
-        }
     }
 
     IEnumerator DelayedStartVoting()
     {
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(2f);
         PickRandomCategories();
         photonView.RPC("RPC_SetCategories", RpcTarget.All, selectedCategories);
     }
@@ -40,7 +38,6 @@ public class VotingManager : MonoBehaviourPunCallbacks
     void PickRandomCategories()
     {
         List<TextAsset> tempList = new List<TextAsset>(categoryJsonFiles);
-
         for (int i = 0; i < 3 && tempList.Count > 0; i++)
         {
             int randIndex = Random.Range(0, tempList.Count);
@@ -53,6 +50,7 @@ public class VotingManager : MonoBehaviourPunCallbacks
     void RPC_SetCategories(string[] categories)
     {
         selectedCategories = categories;
+        votes.Clear();
 
         for (int i = 0; i < categories.Length; i++)
         {
@@ -60,17 +58,19 @@ public class VotingManager : MonoBehaviourPunCallbacks
             votes[categories[i]] = 0;
         }
 
-        StartVoting();
+        foreach (Button button in allButtons)
+            button.interactable = true;
+
+        votingTime = 30f;
+        isVotingActive = true;
     }
 
     public void VoteForCategory(int index)
     {
         if (isVotingActive)
         {
-            foreach(Button button in allButtons)
-            {
+            foreach (Button button in allButtons)
                 button.interactable = false;
-            }
 
             photonView.RPC("RPC_RegisterVote", RpcTarget.MasterClient, selectedCategories[index]);
         }
@@ -79,17 +79,10 @@ public class VotingManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_RegisterVote(string category)
     {
-        if (!PhotonNetwork.IsMasterClient) return; 
+        if (!PhotonNetwork.IsMasterClient) return;
 
         if (votes.ContainsKey(category))
             votes[category]++;
-    }
-
-
-    void StartVoting()
-    {
-        isVotingActive = true;
-        votingTime = 30f;
     }
 
     void Update()
@@ -100,9 +93,7 @@ public class VotingManager : MonoBehaviourPunCallbacks
             timerText.text = Mathf.CeilToInt(votingTime).ToString();
 
             if (votingTime <= 0)
-            {
                 EndVoting();
-            }
         }
     }
 
@@ -132,9 +123,9 @@ public class VotingManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_AnnounceWinner(string resultsSummary, string winner)
     {
-        Debug.Log("Winner: " + winner);
         result.text = resultsSummary + "\nWinner: " + winner;
+
+        if (PhotonNetwork.IsMasterClient)
+            GameManager.Instance.ChangeState(GamePhase.Question, winner);
     }
-
-
 }

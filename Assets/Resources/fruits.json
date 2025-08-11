@@ -1,5 +1,8 @@
 {
-  "question": "اكتر فاكهه مشهوره",
+  "MostQuestion": "The most common fruit",
+  "LeastQuestion": "The least common fruit",
+  "arabicMostQuestion": "اكتر فاكهة مشهورة",
+  "arabicLeastQuestion": "اقل فاكهة مشهوة",
   "total_responses": 1257,
   "answers": [
     {

@@ -1,5 +1,8 @@
 {
-  "question": "اكتر مشروب سخن مشهور",
+  "MostQuestion": "The most common cold drink",
+  "LeastQuestion": "The least common cold drink",
+  "arabicMostQuestion": "اكتر مشروب بارد مشهور",
+  "arabicLeastQuestion": "اقل مشروب بارد مشهور",
   "total_responses": 892,
   "answers": [
     {

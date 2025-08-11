@@ -1,5 +1,8 @@
 {
-  "question": "اكتر خضار مشهور",
+  "MostQuestion": "The most common vegetables",
+  "LeastQuestion": "The least common vegetables",
+  "arabicMostQuestion": "اكتر خضار مشهور",
+  "arabicLeastQuestion": "اقل خضار مشهور",
   "total_responses": 984,
   "answers": [
     {
