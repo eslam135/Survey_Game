@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 030d79ea92f02f744b02c2b5b21db355
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274385
+  packageName: Easy UI Panel Manager
+  packageVersion: 1.0
+  assetPath: Assets/Bfree/EasyUIPanelManager/Scripts/TabManager.cs
+  uploadId: 637448

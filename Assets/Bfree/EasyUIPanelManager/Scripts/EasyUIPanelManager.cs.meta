@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: fa6c27689c16a264f9acf933b592b07d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274385
+  packageName: Easy UI Panel Manager
+  packageVersion: 1.0
+  assetPath: Assets/Bfree/EasyUIPanelManager/Scripts/EasyUIPanelManager.cs
+  uploadId: 637448

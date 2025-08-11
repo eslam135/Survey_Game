@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a47d0ddffe7212a48a66a98a66a31478
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274385
+  packageName: Easy UI Panel Manager
+  packageVersion: 1.0
+  assetPath: Assets/Bfree/EasyUIPanelManager/Sample/Nestedpanel_itemdescription.prefab
+  uploadId: 637448

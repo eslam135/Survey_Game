@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: be19145f1aa22a741a78d326df09c952
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274385
+  packageName: Easy UI Panel Manager
+  packageVersion: 1.0
+  assetPath: Assets/Bfree/EasyUIPanelManager/Scripts/NestedPanel.cs
+  uploadId: 637448

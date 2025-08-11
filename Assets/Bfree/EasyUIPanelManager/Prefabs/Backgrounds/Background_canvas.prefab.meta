@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b382be186aeceb649afc101ab4eb42e3
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 274385
+  packageName: Easy UI Panel Manager
+  packageVersion: 1.0
+  assetPath: Assets/Bfree/EasyUIPanelManager/Prefabs/Backgrounds/Background_canvas.prefab
+  uploadId: 637448
