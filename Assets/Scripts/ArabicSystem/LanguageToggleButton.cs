@@ -34,11 +34,16 @@ public class LanguageToggleButton : MonoBehaviour
     [SerializeField] private TextAlignmentOptions englishAlignment = TextAlignmentOptions.Center;
     [SerializeField] private TextAlignmentOptions arabicAlignment = TextAlignmentOptions.Right;
 
+    // Track last displayed language to auto-refresh when manager changes elsewhere
+    private ArabicEnglishManager.Language _lastDisplayedLang;
+    private bool _hasLastDisplayed = false;
+
     private Coroutine _waitRoutine;
 
     private void Awake()
     {
         if (_button == null) _button = GetComponent<Button>();
+        if (_label == null) _label = GetComponentInChildren<TMP_Text>(true);
         if (_button != null) _button.onClick.AddListener(OnClickToggle);
         UpdateLabel(); // will use fallback if manager not ready yet
     }
@@ -49,6 +54,7 @@ public class LanguageToggleButton : MonoBehaviour
         // If manager not ready yet (script execution order), wait until it appears then refresh once
         if (ArabicEnglishManager.Instance == null && _waitRoutine == null)
             _waitRoutine = StartCoroutine(WaitForManagerThenRefresh());
+        _hasLastDisplayed = false; // force first Update() to refresh
     }
 
     private IEnumerator WaitForManagerThenRefresh()
@@ -72,6 +78,23 @@ public class LanguageToggleButton : MonoBehaviour
     private void OnDestroy()
     {
         if (_button != null) _button.onClick.RemoveListener(OnClickToggle);
+    }
+
+    private void Update()
+    {
+        if (_label == null) return;
+        var mgr = ArabicEnglishManager.Instance;
+        var current = mgr != null ? mgr.CurrentLanguage : defaultLanguageWhenManagerMissing;
+        var langToDisplay = showNextLanguage
+            ? (current == ArabicEnglishManager.Language.English ? ArabicEnglishManager.Language.Arabic : ArabicEnglishManager.Language.English)
+            : current;
+
+        if (!_hasLastDisplayed || _lastDisplayedLang != langToDisplay)
+        {
+            UpdateLabel();
+            _lastDisplayedLang = langToDisplay;
+            _hasLastDisplayed = true;
+        }
     }
 
     private void OnClickToggle()
@@ -107,4 +130,15 @@ public class LanguageToggleButton : MonoBehaviour
             _label.text = englishLabel;
         }
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (!Application.isPlaying)
+        {
+            if (_label == null) _label = GetComponentInChildren<TMP_Text>(true);
+            UpdateLabel();
+        }
+    }
+#endif
 }

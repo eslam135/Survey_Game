@@ -178,9 +178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'New Text
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e3b05037c758cd343b5881d1277c7593, type: 2}
   m_sharedMaterial: {fileID: 4830042950271180684, guid: e3b05037c758cd343b5881d1277c7593, type: 2}
@@ -268,3 +266,4 @@ MonoBehaviour:
   autoDetectArabicInOriginal: 1
   forceEnglishLeft: 0
   forceArabicRight: 0
+  enableDebugLogs: 1
