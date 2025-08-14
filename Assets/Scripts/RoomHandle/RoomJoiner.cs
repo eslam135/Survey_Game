@@ -3,10 +3,11 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
+using AdvancedInputFieldPlugin;
 
 public class RoomJoiner : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private TMP_InputField roomCodeInput;
+    [SerializeField] private AdvancedInputField roomCodeInput;
     [SerializeField] private TMP_Text error;
     [SerializeField] private Button joinRoomButton;
 
@@ -36,7 +37,7 @@ public class RoomJoiner : MonoBehaviourPunCallbacks
             avatarIndex = (int)PhotonNetwork.LocalPlayer.CustomProperties["avatarIndex"];
         }
 
-        string code = roomCodeInput.text.Trim().ToUpper();
+        string code = (roomCodeInput != null ? roomCodeInput.Text : string.Empty).Trim().ToUpper();
         PhotonNetwork.NickName = string.IsNullOrEmpty(PlayerPrefs.GetString("name"))
             ? GenerateRandomName()
             : PlayerPrefs.GetString("name");

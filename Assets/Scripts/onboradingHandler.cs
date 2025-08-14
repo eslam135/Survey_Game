@@ -4,13 +4,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AdvancedInputFieldPlugin;
 
 public class OnboardingHandler : MonoBehaviourPunCallbacks
 {
     private int avatarIndex;
     private string playerName;
 
-    [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private AdvancedInputField nameInput;
     [SerializeField] private TMP_Text error;
 
 
@@ -27,7 +28,7 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
 
     public void OnContinuePress()
     {
-        playerName = nameInput.text.Trim();
+        playerName = nameInput.GetText().Trim();
 
         if (avatarIndex == -1)
         {
@@ -59,6 +60,6 @@ public class OnboardingHandler : MonoBehaviourPunCallbacks
     }
     public void OnInputFieldChange()
     {
-        playerName = nameInput.text.Trim();
+        playerName = nameInput.GetText().Trim();
     }
 }

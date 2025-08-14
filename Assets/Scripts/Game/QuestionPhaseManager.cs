@@ -3,6 +3,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using AdvancedInputFieldPlugin;
 
 [System.Serializable]
 public class CategoryData
@@ -26,7 +27,7 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 {
     [Header("UI References")]
     [SerializeField] private TMP_Text questionText;
-    [SerializeField] private TMP_InputField answerInput;
+    [SerializeField] private AdvancedInputField answerInput;
     [SerializeField] private Button submitAnswerButton;
     [SerializeField] private TMP_Text rankingText;
     [SerializeField] private TMP_Text timerText;
@@ -58,7 +59,7 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 
         questionText.gameObject.SetActive(true);
         rankingText.gameObject.SetActive(false);
-        answerInput.text = "";
+        answerInput.SetText("");
         answerInput.gameObject.SetActive(false);
         submitAnswerButton.gameObject.SetActive(false);
 
@@ -78,9 +79,9 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 
     public void SubmitAnswer()
     {
-        if (isAnsweringPhase && !string.IsNullOrWhiteSpace(answerInput.text))
+        if (isAnsweringPhase && !string.IsNullOrWhiteSpace(answerInput.GetText()))
         {
-            string answer = answerInput.text.Trim();
+            string answer = answerInput.GetText().Trim();
 
             photonView.RPC("RPC_ReceiveAnswer", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, answer);
 

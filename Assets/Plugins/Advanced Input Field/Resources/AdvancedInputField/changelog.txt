@@ -1,0 +1,5 @@
+1.8.3:
+- Bugfix Android: Navigation bar buttons gone on some devices when keyboard appears
+- Bugfix Editor: Errors when SimulateMobileBehaviourInEditor is false
+- Bugfix UWP: Errors when using UWP binding
+- Bugfix: Several small bugs
