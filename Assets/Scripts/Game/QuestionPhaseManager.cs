@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ArabicSupport; // Added for ArabicFixer
 
 [System.Serializable]
 public class CategoryData
@@ -167,15 +168,21 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
             points = Mathf.Max(points / 2, 1); // never drop below 1
         }
 
-        // Build results message
-        string rankings = "Results:\n";
+        // Build results payload (structured to avoid bidi issues)
+        var names = new List<string>();
+        var answersList = new List<string>();
+        var freqs = new List<int>();
+        var totals = new List<int>();
         foreach (var entry in playerResults)
         {
             string playerName = PhotonNetwork.CurrentRoom.GetPlayer(entry.playerId)?.NickName ?? $"Player {entry.playerId}";
-            rankings += $"{playerName}: {entry.answer} ({entry.frequency}) → Total: {totalScores[entry.playerId]} pts\n";
+            names.Add(playerName);
+            answersList.Add(entry.answer);
+            freqs.Add(entry.frequency);
+            totals.Add(totalScores[entry.playerId]);
         }
 
-        photonView.RPC("RPC_ShowRankings", RpcTarget.All, rankings);
+        photonView.RPC("RPC_ShowRankings", RpcTarget.All, names.ToArray(), answersList.ToArray(), freqs.ToArray(), totals.ToArray());
 
         StartCoroutine(ProceedToNextRound());
     }
@@ -190,10 +197,69 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    void RPC_ShowRankings(string rankings)
+    // Helper for Arabic detection
+    static bool ContainsArabicChars(string s)
     {
-        rankingText.text = rankings;
+        if (string.IsNullOrEmpty(s)) return false;
+        foreach (char c in s)
+        {
+            if ((c >= '\u0600' && c <= '\u06FF') || (c >= '\u0750' && c <= '\u077F') || (c >= '\u08A0' && c <= '\u08FF'))
+                return true;
+        }
+        return false;
+    }
+
+    [PunRPC]
+    void RPC_ShowRankings(string[] names, string[] answersArr, int[] freqs, int[] totals)
+    {
+        // Ensure the auto-localizer treats this TMP as dynamic content
+        var disp = rankingText != null ? rankingText.GetComponent<DisplayLocalizedText>() : null;
+        if (disp != null) disp.treatAsDynamic = true;
+
+        bool isArabic = ArabicEnglishManager.Instance != null && ArabicEnglishManager.Instance.CurrentLanguage == ArabicEnglishManager.Language.Arabic;
+        if (isArabic)
+        {
+            const char LRM = '\u200E'; // Left-to-right mark
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("النتائج:");
+
+            for (int i = 0; i < names.Length && i < answersArr.Length && i < freqs.Length && i < totals.Length; i++)
+            {
+                string name = names[i] ?? string.Empty;
+                string ans = answersArr[i] ?? string.Empty;
+
+                // Wrap purely non-Arabic segments with LRM to keep ordering
+                if (!ContainsArabicChars(name)) name = string.Concat(LRM, name, LRM);
+                if (!ContainsArabicChars(ans)) ans = string.Concat(LRM, ans, LRM);
+
+                sb.AppendLine($"• الاسم: {name}");
+                sb.AppendLine($"  الإجابة: {ans}");
+                sb.AppendLine($"  التكرار: {freqs[i]}");
+                sb.AppendLine($"  المجموع: {totals[i]} نقاط");
+                sb.AppendLine();
+            }
+
+            string shaped = ArabicSupport.ArabicFixer.Fix(sb.ToString(), showTashkeel: false, useHinduNumbers: true);
+            rankingText.alignment = TextAlignmentOptions.Right;
+            rankingText.text = shaped;
+        }
+        else
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Results:");
+            for (int i = 0; i < names.Length && i < answersArr.Length && i < freqs.Length && i < totals.Length; i++)
+            {
+                sb.AppendLine($"• Name: {names[i]}");
+                sb.AppendLine($"  Answer: {answersArr[i]}");
+                sb.AppendLine($"  Frequency: {freqs[i]}");
+                sb.AppendLine($"  Total: {totals[i]} pts");
+                sb.AppendLine();
+            }
+            rankingText.alignment = TextAlignmentOptions.Left;
+            rankingText.text = sb.ToString();
+        }
+
         rankingText.gameObject.SetActive(true);
         questionText.gameObject.SetActive(false);
         answerInput.gameObject.SetActive(false);

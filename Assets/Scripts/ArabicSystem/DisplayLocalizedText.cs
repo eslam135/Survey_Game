@@ -15,6 +15,10 @@ public class DisplayLocalizedText : MonoBehaviour
 
     [Header("Alignment Overrides")] public bool forceEnglishLeft = true; public bool forceArabicRight = true;
 
+    // NEW: When true, do not cache/restore a single "original" value. Always use current TMP text as source.
+    [Tooltip("For texts that change at runtime (rankings, timers, chat). Uses current TMP text for shaping and avoids caching/restoring an original string.")]
+    public bool treatAsDynamic = false;
+
     TMP_Text _tmp;
     string _originalEnglish; // stored key
     ArabicEnglishManager.Language _lastLang;
@@ -106,7 +110,7 @@ public class DisplayLocalizedText : MonoBehaviour
         _tmp = GetComponent<TMP_Text>();
         if (_tmp == null) return;
         // If there's already text set in inspector/prefab, use it. If it's empty, we'll capture it later.
-        if (!string.IsNullOrEmpty(_tmp.text) && string.IsNullOrEmpty(_originalEnglish))
+        if (!treatAsDynamic && !string.IsNullOrEmpty(_tmp.text) && string.IsNullOrEmpty(_originalEnglish))
             _originalEnglish = _tmp.text;
         _initialized = true;
     }
@@ -130,7 +134,7 @@ public class DisplayLocalizedText : MonoBehaviour
         }
 
         // If original key was empty (prefab had empty text) but text is now populated, capture it and reapply language.
-        if (string.IsNullOrEmpty(_originalEnglish) && _tmp != null && !string.IsNullOrEmpty(_tmp.text))
+        if (!treatAsDynamic && string.IsNullOrEmpty(_originalEnglish) && _tmp != null && !string.IsNullOrEmpty(_tmp.text))
         {
             _originalEnglish = _tmp.text;
             if (enableDebugLogs) Debug.Log($"[DisplayLocalizedText] Captured original text for {_tmp.name}: '{_originalEnglish}'");
@@ -174,8 +178,8 @@ public class DisplayLocalizedText : MonoBehaviour
         if (lang == ArabicEnglishManager.Language.Arabic)
         {
             string arabicRaw = GetArabicRaw();
-            // Apply Arabic shaping/fixing
-            string shaped = ArabicFixer.Fix(arabicRaw ?? "");
+            // Avoid double-fixing if text already contains presentation forms
+            string shaped = IsAlreadyShaped(arabicRaw) ? (arabicRaw ?? string.Empty) : ArabicFixer.Fix(arabicRaw ?? string.Empty, showTashkeel: false, useHinduNumbers: true);
 
             // Set text and force TMP to rebuild the mesh so it renders correctly right away
             _tmp.text = shaped;
@@ -185,12 +189,12 @@ public class DisplayLocalizedText : MonoBehaviour
             if (forceArabicRight) _tmp.alignment = TextAlignmentOptions.Right;
 
             if (enableDebugLogs)
-                Debug.Log($"[DisplayLocalizedText] Applied Arabic to '{_tmp.name}': raw='{arabicRaw}' -> shaped='{shaped}' registered={_registeredWithManager}");
+                Debug.Log($"[DisplayLocalizedText] Applied Arabic to '{_tmp.name}': raw='{arabicRaw}' -> shaped='{(IsAlreadyShaped(arabicRaw) ? "(kept)" : shaped)}' registered={_registeredWithManager}");
         }
         else
         {
             // Restore original (if it's still empty, leave the TMP's current text as-is)
-            if (!string.IsNullOrEmpty(_originalEnglish))
+            if (!treatAsDynamic && !string.IsNullOrEmpty(_originalEnglish))
                 _tmp.text = _originalEnglish;
 
             _tmp.ForceMeshUpdate();
@@ -203,8 +207,24 @@ public class DisplayLocalizedText : MonoBehaviour
         }
     }
 
+    // Detect Arabic presentation forms so we don't apply ArabicFixer twice
+    static bool IsAlreadyShaped(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return false;
+        foreach (char c in s)
+        {
+            // Arabic Presentation Forms-A: FB50–FDFF, Forms-B: FE70–FEFF
+            if ((c >= '\uFB50' && c <= '\uFDFF') || (c >= '\uFE70' && c <= '\uFEFF'))
+                return true;
+        }
+        return false;
+    }
+
     string GetArabicRaw()
     {
+        if (treatAsDynamic && _tmp != null && !string.IsNullOrEmpty(_tmp.text))
+            return _tmp.text; // always use the current text as source for shaping
+
         if (!string.IsNullOrEmpty(explicitArabicTranslation)) return explicitArabicTranslation.Trim();
         if (autoLookupCommonWords && !string.IsNullOrEmpty(_originalEnglish) && COMMON.TryGetValue(_originalEnglish.Trim(), out var found)) return found;
         if (autoDetectArabicInOriginal && !string.IsNullOrEmpty(_originalEnglish) && ContainsArabic(_originalEnglish)) return _originalEnglish; // already Arabic text typed in inspector
