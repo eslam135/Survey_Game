@@ -48,6 +48,7 @@ MonoBehaviour:
   - RPC_OnStateChanged
   - RPC_ReceiveAnswer
   - RPC_ShowRankings
+  - RPC_SwitchToMainMenu
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

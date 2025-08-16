@@ -12,6 +12,9 @@ public class VotingManager : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text result;
     [SerializeField] private TMP_Text[] categoryTexts;
     [SerializeField] private Button[] allButtons;
+    [SerializeField] private GameObject questionParent;
+    [SerializeField] private GameObject votingParent;
+
 
     [Header("Category Files")]
     [SerializeField] private TextAsset[] categoryJsonFiles;
@@ -24,8 +27,11 @@ public class VotingManager : MonoBehaviourPunCallbacks
     public void StartVotingPhase()
     {
         result.text = "";
+        Debug.Log("Started");
         if (PhotonNetwork.IsMasterClient)
             StartCoroutine(DelayedStartVoting());
+        votingParent.SetActive(true);
+        questionParent.SetActive(false);
     }
 
     IEnumerator DelayedStartVoting()
@@ -61,7 +67,7 @@ public class VotingManager : MonoBehaviourPunCallbacks
         foreach (Button button in allButtons)
             button.interactable = true;
 
-        votingTime = 30f;
+        votingTime = 10f;
         isVotingActive = true;
     }
 

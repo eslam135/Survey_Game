@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviourPun
 {
     public static UIManager Instance { get; private set; }
 
@@ -57,10 +58,20 @@ public class UIManager : MonoBehaviour
         return currState;
     }
 
-    public void onBackButtonPress()
+    public void OnBackButtonPress()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPC_SwitchToMainMenu", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    void RPC_SwitchToMainMenu()
     {
         SwitchState(GameState.MainMenu);
     }
+
 }
 
 public enum GameState

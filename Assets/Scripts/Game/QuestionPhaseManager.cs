@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using AdvancedInputFieldPlugin;
 using Photon.Pun;
-using TMPro;
-using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
-using AdvancedInputFieldPlugin;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class CategoryData
@@ -31,35 +32,45 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
     [SerializeField] private Button submitAnswerButton;
     [SerializeField] private TMP_Text rankingText;
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private Button backButton;
-
+    [SerializeField] private GameObject questionParent;
+    [SerializeField] private GameObject votingParent;
 
     [Header("Category Files")]
     [SerializeField] private TextAsset[] categoryJsonFiles;
 
-    private Dictionary<int, string> playerAnswers = new Dictionary<int, string>();
+    private Dictionary<int, string> roundAnswers = new Dictionary<int, string>();
+    private Dictionary<int, int> totalScores = new Dictionary<int, int>();
+
     private string currentCategory;
     private float answerTime;
     private bool isAnsweringPhase = false;
+    private bool isMostCommonRound = true;
 
-    public void StartQuestionPhase(string categoryName)
+    public void StartQuestionPhase(string categoryName, bool mostCommonRound)
     {
+        Debug.Log("QuestionPhaseStarted");
+        votingParent.SetActive(false);
+        questionParent.SetActive(true);
+
         currentCategory = categoryName;
-        playerAnswers.Clear();
+        isMostCommonRound = mostCommonRound;
+        roundAnswers.Clear();
+        questionText.text = "";
+        answerInput.SetText("");
+        questionText.gameObject.SetActive(true);
 
         foreach (var file in categoryJsonFiles)
         {
             if (file.name == categoryName)
             {
                 CategoryData data = JsonUtility.FromJson<CategoryData>(file.text);
-                questionText.text = data.MostQuestion;
+                Debug.Log(mostCommonRound);
+                questionText.text = mostCommonRound ? data.MostQuestion : data.LeastQuestion;
                 break;
             }
         }
-
-        questionText.gameObject.SetActive(true);
+        
         rankingText.gameObject.SetActive(false);
-        answerInput.SetText("");
         answerInput.gameObject.SetActive(false);
         submitAnswerButton.gameObject.SetActive(false);
 
@@ -82,9 +93,7 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
         if (isAnsweringPhase && !string.IsNullOrWhiteSpace(answerInput.GetText()))
         {
             string answer = answerInput.GetText().Trim();
-
-            photonView.RPC("RPC_ReceiveAnswer", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, answer);
-
+            photonView.RPC("RPC_ReceiveAnswer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber, answer);
             submitAnswerButton.interactable = false;
         }
     }
@@ -92,8 +101,8 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_ReceiveAnswer(int playerId, string answer)
     {
-        if (!playerAnswers.ContainsKey(playerId))
-            playerAnswers[playerId] = answer;
+        if (!roundAnswers.ContainsKey(playerId))
+            roundAnswers[playerId] = answer;
     }
 
     void Update()
@@ -106,7 +115,6 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
             if (answerTime <= 0)
             {
                 isAnsweringPhase = false;
-
                 if (PhotonNetwork.IsMasterClient)
                     GameManager.Instance.ChangeState(GamePhase.Ranking);
             }
@@ -115,6 +123,9 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 
     public void ShowRankingPhase()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        // Load frequency data for the current category
         Dictionary<string, int> answerScores = new Dictionary<string, int>();
         foreach (var file in categoryJsonFiles)
         {
@@ -127,14 +138,56 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
             }
         }
 
-        string rankings = "Results:\n";
-        foreach (var kvp in playerAnswers)
+        // Pair each player with their frequency
+        List<(int playerId, string answer, int frequency)> playerResults = new List<(int, string, int)>();
+        foreach (var kvp in roundAnswers)
         {
-            int score = answerScores.ContainsKey(kvp.Value) ? answerScores[kvp.Value] : 0;
-            rankings += $"Player {kvp.Key}: {kvp.Value} ({score} pts)\n";
+            int freq = answerScores.ContainsKey(kvp.Value) ? answerScores[kvp.Value] : 0;
+            playerResults.Add((kvp.Key, kvp.Value, freq));
+        }
+
+        // Sort based on round type
+        if (isMostCommonRound)
+            playerResults.Sort((a, b) => b.frequency.CompareTo(a.frequency)); // descending
+        else
+            playerResults.Sort((a, b) => a.frequency.CompareTo(b.frequency)); // ascending
+
+        // Assign scores halving each time
+        int points = 1000;
+        foreach (var entry in playerResults)
+        {
+            if (!totalScores.ContainsKey(entry.playerId))
+                totalScores[entry.playerId] = 0;
+
+            totalScores[entry.playerId] += points;
+
+            string playerName = PhotonNetwork.CurrentRoom.GetPlayer(entry.playerId)?.NickName ?? $"Player {entry.playerId}";
+            Debug.Log($"{playerName} answered {entry.answer} ({entry.frequency}) → +{points}, total: {totalScores[entry.playerId]}");
+
+            points = Mathf.Max(points / 2, 1); // never drop below 1
+        }
+
+        // Build results message
+        string rankings = "Results:\n";
+        foreach (var entry in playerResults)
+        {
+            string playerName = PhotonNetwork.CurrentRoom.GetPlayer(entry.playerId)?.NickName ?? $"Player {entry.playerId}";
+            rankings += $"{playerName}: {entry.answer} ({entry.frequency}) → Total: {totalScores[entry.playerId]} pts\n";
         }
 
         photonView.RPC("RPC_ShowRankings", RpcTarget.All, rankings);
+
+        StartCoroutine(ProceedToNextRound());
+    }
+
+    private IEnumerator ProceedToNextRound()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.NextRound();
+        }
     }
 
     [PunRPC]
@@ -145,6 +198,10 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
         questionText.gameObject.SetActive(false);
         answerInput.gameObject.SetActive(false);
         submitAnswerButton.gameObject.SetActive(false);
-        backButton.gameObject.SetActive(true);
+    }
+
+    public Dictionary<int, int> GetTotalScores()
+    {
+        return new Dictionary<int, int>(totalScores);
     }
 }
