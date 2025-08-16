@@ -47,6 +47,9 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
     private bool isAnsweringPhase = false;
     private bool isMostCommonRound = true;
 
+    // Lock behavior after submit
+    private bool hasSubmittedThisRound = false;
+
     public void StartQuestionPhase(string categoryName, bool mostCommonRound)
     {
         Debug.Log("QuestionPhaseStarted");
@@ -81,6 +84,14 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 
     public void StartAnsweringPhase()
     {
+        // Re-enable input each round
+        if (answerInput != null)
+        {
+            answerInput.enabled = true; // make sure component is active for typing
+            answerInput.SetText("");
+        }
+        hasSubmittedThisRound = false;
+
         answerInput.gameObject.SetActive(true);
         submitAnswerButton.gameObject.SetActive(true);
         submitAnswerButton.interactable = true;
@@ -91,11 +102,21 @@ public class QuestionPhaseManager : MonoBehaviourPunCallbacks
 
     public void SubmitAnswer()
     {
-        if (isAnsweringPhase && !string.IsNullOrWhiteSpace(answerInput.GetText()))
+        if (isAnsweringPhase && !hasSubmittedThisRound && !string.IsNullOrWhiteSpace(answerInput.GetText()))
         {
             string answer = answerInput.GetText().Trim();
             photonView.RPC("RPC_ReceiveAnswer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber, answer);
+
+            hasSubmittedThisRound = true;
             submitAnswerButton.interactable = false;
+
+            // Clear and hide input immediately after sending
+            if (answerInput != null)
+            {
+                answerInput.SetText("");
+                answerInput.enabled = false; // block further interaction
+                answerInput.gameObject.SetActive(false); // hide completely
+            }
         }
     }
 
